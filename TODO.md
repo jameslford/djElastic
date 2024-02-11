@@ -1,0 +1,1 @@
+- look into using ES SQL. Possibly 2 types of managers / queries: DSL and SQL. Also, could potentially use existing managers with unmanaged model and just take the SQL from the query
