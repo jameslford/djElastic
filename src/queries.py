@@ -24,6 +24,12 @@ RANGE_FIELDS = [
     IpField,
 ]
 
+from typing import Literal
+
+from elasticsearch_dsl import A
+
+ScheduleType = Literal["minute", "hour", "day", "week", "month", "quarter", "year"]
+
 
 def dt_to_es_format(dt: datetime) -> str:
     return dt.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
