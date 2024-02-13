@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, List, Optional, Type, Union
 
 import pandas as pd
 from django.conf import settings
-from elasticsearch_dsl import Search
+from elasticsearch_dsl import Q, Search
 
 if TYPE_CHECKING:
     from .models import EsModel
@@ -18,23 +18,7 @@ class EsQuerySet:
         self._cached_results = None
 
     @property
-    def host(self):
-        if self.search._using is not None:
-            return self.search._using.host
-        return settings.ELASTICSEARCH["default"]["host"]
-
-    @property
-    def port(self):
-        if self.search._using is not None:
-            return self.search._using.port
-        return settings.ELASTICSEARCH["default"]["port"]
-
-    @property
     def client(self):
-        pass
-
-    @property
-    def write_client(self):
         pass
 
     def execute_read(self):
@@ -96,11 +80,20 @@ class EsQuerySet:
     def should(self, *args, **kwargs):
         pass
 
-    def order_by(self, *args, **kwargs):
-        pass
+    def match(self, *args, **kwargs):
+        query = Q("match", *args, **kwargs)
 
-    def group_by(self, *args, **kwargs):
-        pass
+    def order_by(self, *args, **kwargs):
+        """
+        Adds an order to the query.
+        """
+        self.search = self.search.sort(*args, **kwargs)
+
+    def group_by(self, fields: Union[str, List[str]]):
+        """
+        Performs a terms aggregation on the specified field(s).
+        Nested buckets can be specified via dunder notation, i.e. `field__subfield`.
+        """
 
     def get(self, document_id):
         pass
