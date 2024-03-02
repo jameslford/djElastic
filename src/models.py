@@ -1,8 +1,4 @@
-from typing import Type
-
-from elasticsearch_dsl import Document, Field
-
-from .managers import BaseEsManager
+from .managers import EsManager
 
 
 class EsModelBase(type):
@@ -14,16 +10,16 @@ class EsModelBase(type):
     def __init__(cls, name, bases, attrs):
         super().__init__(name, bases, attrs)
         required_attrs = ["index_pattern"]
-        print(f"attrs: {attrs}")
         for attr in required_attrs:
             if attr not in attrs:
                 raise ValueError(f"EsModel must define {attr}")
 
+    @property
+    def objects(cls) -> EsManager:
+        if not hasattr(cls, "_objects"):
+            cls._objects = EsManager(cls)
+        return cls._objects
 
-class EsModel(Document, metaclass=EsModelBase):
 
-    objects = BaseEsManager()
-
-    @classmethod
-    def get_field_type(cls, field_name) -> Type[Field]:
-        return cls._doc_type.mapping[field_name]["type"]
+class EsModel(metaclass=EsModelBase):
+    pass
