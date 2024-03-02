@@ -1,7 +1,7 @@
-from .managers import EsManager
+from .managers import OsManager
 
 
-class EsModelBase(type):
+class OsModelBase(type):
     def __new__(cls, name, bases, attrs):
         new_class = super().__new__(cls, name, bases, attrs)
         new_class._meta = None
@@ -12,14 +12,14 @@ class EsModelBase(type):
         required_attrs = ["index_pattern"]
         for attr in required_attrs:
             if attr not in attrs:
-                raise ValueError(f"EsModel must define {attr}")
+                raise ValueError(f"OsModel must define {attr}")
 
     @property
-    def objects(cls) -> EsManager:
+    def objects(cls) -> OsManager:
         if not hasattr(cls, "_objects"):
-            cls._objects = EsManager(cls)
+            cls._objects = OsManager(cls)
         return cls._objects
 
 
-class EsModel(metaclass=EsModelBase):
+class OsModel(metaclass=OsModelBase):
     pass

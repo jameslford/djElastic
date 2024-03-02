@@ -1,9 +1,9 @@
 from typing import List
 
-from elasticsearch_dsl.response import Response
+from opensearch_dsl.response import Response
 
 
-class EsResults:
+class OsResults:
     def __init__(self, results: Response):
         self.results = results
 

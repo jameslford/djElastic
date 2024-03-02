@@ -3,7 +3,7 @@ from importlib import import_module
 from django.conf import settings
 
 
-class EsRouter:
+class OsRouter:
     def db_for_read(self, model, **hints):
         if model._meta.app_label == "es":
             return "es"
@@ -30,4 +30,4 @@ def get_router():
         module, klass = settings.DJ_ES_ROUTER.rsplit(".", 1)
         mod = import_module(module)
         return getattr(mod, klass)
-    return EsRouter
+    return OsRouter

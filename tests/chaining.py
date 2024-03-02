@@ -1,7 +1,7 @@
-from .models import EsModel
+from ..dj_os.models import OsModel
 
 
-class ExampleModel(EsModel):
+class ExampleModel(OsModel):
     index_pattern = "example-*"
 
 
