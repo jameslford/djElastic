@@ -1,16 +1,31 @@
-from typing import TYPE_CHECKING, List, Optional, Type, Union
+from datetime import datetime
+from typing import TYPE_CHECKING, List, Literal, Optional, Type, Union
 
 import pandas as pd
 from django.conf import settings
-from elasticsearch_dsl import Q, Search
+from opensearch_dsl import Q, Search
 
 if TYPE_CHECKING:
-    from .models import EsModel
+    from .models import OsModel
+
+# RANGE_FIELDS = [
+#     DateField,
+#     IntegerField,
+#     LongField,
+#     FloatField,
+#     IpField,
+# ]
+
+ScheduleType = Literal["minute", "hour", "day", "week", "month", "quarter", "year"]
 
 
-class EsQuerySet:
+def dt_to_os_format(dt: datetime) -> str:
+    return dt.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
 
-    def __init__(self, model: Type["EsModel"], search: Optional[Search] = None):
+
+class OsQuerySet:
+
+    def __init__(self, model: Type["OsModel"], search: Optional[Search] = None):
         self.model = model
         self.index = model._meta.index_pattern
         self.search = search or Search(index=self.index)
@@ -27,7 +42,7 @@ class EsQuerySet:
         return results
 
     def clone(self):
-        return EsQuerySet(self.model, search=self.search)
+        return OsQuerySet(self.model, search=self.search)
 
     def to_dict(self):
         queries = self.search.to_dict()
