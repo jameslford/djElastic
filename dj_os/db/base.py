@@ -1,5 +1,5 @@
-from ..excpetions import ConfigurationError
-from ..managers import OsManager
+from ..exceptions import ConfigurationError
+from .managers import OsManager
 
 
 class OsModelBase(type):
@@ -37,4 +37,6 @@ class OsModelBase(type):
 
 
 class OsModel(metaclass=OsModelBase):
-    pass
+    """
+    Nesting fields will be supported with dot notation
+    """

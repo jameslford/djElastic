@@ -6,7 +6,7 @@ from django.conf import settings
 from opensearchpy import Q, Search
 
 if TYPE_CHECKING:
-    from .db import OsModel
+    from . import OsModel
 
 # RANGE_FIELDS = [
 #     DateField,
