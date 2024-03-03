@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Type
 from .queryset import OsQuerySet
 
 if TYPE_CHECKING:
-    from .models import OsModel
+    from .db import OsModel
 
 
 class OsManager:

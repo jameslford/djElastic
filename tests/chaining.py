@@ -1,4 +1,4 @@
-from ..dj_os.models import OsModel
+from ..dj_os.db import OsModel
 
 
 class ExampleModel(OsModel):

@@ -1,6 +1,6 @@
 from typing import List
 
-from opensearch_dsl.response import Response
+from opensearchpy.helpers.response import Response
 
 
 class OsResults:

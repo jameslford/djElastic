@@ -3,10 +3,10 @@ from typing import TYPE_CHECKING, List, Literal, Optional, Type, Union
 
 import pandas as pd
 from django.conf import settings
-from opensearch_dsl import Q, Search
+from opensearchpy import Q, Search
 
 if TYPE_CHECKING:
-    from .models import OsModel
+    from .db import OsModel
 
 # RANGE_FIELDS = [
 #     DateField,
