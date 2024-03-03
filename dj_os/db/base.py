@@ -2,7 +2,9 @@ from django.conf import settings
 from opensearchpy import OpenSearch
 
 from ..exceptions import ConfigurationError
+from .fields import BaseField
 from .managers import OsManager
+from .model_registry import registry
 
 
 class OsModelBase(type):
@@ -23,6 +25,12 @@ class OsModelBase(type):
                           with `index pattern` attribute."
                 )
         setattr(new_class, "_meta", meta)
+        fields = {}
+        for obj_name, obj in attrs.items():
+            if issubclass(obj, BaseField):
+                fields[obj_name] = obj
+        new_class._fields = fields
+        registry.register(new_class)
         return new_class
 
     def __init__(cls, name, bases, attrs):
@@ -48,11 +56,32 @@ class OsModel(metaclass=OsModelBase):
         pass
 
     @classmethod
+    def render_settings(self):
+        """
+        This will be used to render the settings for the index
+        """
+        return {"index": {}}
+
+    @classmethod
     def render_mappings(cls):
         """
         This will be used to render the mappings for the index
         """
-        pass
+        mappings = {}
+        for name, field in cls._fields.items():
+            options = {"type": field.field_type}
+            # TODO: need to handle nested fields
+            if field.ignore_malformed:
+                options["ignore_malformed"] = field.ignore_malformed
+            mappings[name] = options
+        return {"properties": mappings}
+
+    @classmethod
+    def render_aliases(cls):
+        """
+        This will be used to render the aliases for the index
+        """
+        return {}
 
     @classmethod
     def create_index_mapping(cls):
@@ -62,3 +91,9 @@ class OsModel(metaclass=OsModelBase):
         as POC
         """
         client = OpenSearch(settings.OPENSEARCH_HOSTS)
+        body = {
+            "mappings": cls.render_mappings(),
+            "settings": cls.render_settings(),
+            "aliases": cls.render_aliases(),
+        }
+        client.indices.create(index=cls._meta.index_pattern, body=body)

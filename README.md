@@ -1,5 +1,7 @@
 ### Description
 
+To provide a Django style api and functionality for OpenSearch.
+
 ### Example
 
 ```python
@@ -23,10 +25,16 @@ class Cars(models.OsModel):
         }
 
 >>> Cars.create_index()
->>> car = Cars(name='Ferrari', price=1000000, year=2019, created_at='2019-01-01', updated_at='2019-01-01')
->>> car.save()
->>> car = Cars.models.filter(name='Ferrari').get()
->>> car.name
+>>> new_car = Cars(name='Ferrari', price=1000000, year=2019, created_at='2019-01-01', updated_at='2019-01-01')
+>>> new_car.save()
+>>> new_car = Cars.models.filter(name='Ferrari').get()
+>>> new_car.name
 ... 'Ferrari'
-
+>>> new_car = Cars(name='Lamborghini', price='really expensive', year=2019, created_at='2019-01-01', updated_at='2019-01-01')
+>>> new_car.save()
+>>> new_car.price
+... None # because of ignore_malformed=True
+>>> new_car = Cars(name=150, price=1000000, year=2019, created_at='2019-01-01', updated_at='2019-01-01')
+>>> new_car.save()
+... ValidationError: {'name': 'Value is not a string'} # there is no ignore_malformed=True, so won't index
 ```
