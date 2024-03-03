@@ -1,5 +1,6 @@
 class BaseField:
-    pass
+    def __init__(self, ignore_malformed=False) -> None:
+        pass
 
 
 class ForeignKey(BaseField):

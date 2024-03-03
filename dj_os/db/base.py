@@ -1,3 +1,6 @@
+from django.conf import settings
+from opensearchpy import OpenSearch
+
 from ..exceptions import ConfigurationError
 from .managers import OsManager
 
@@ -40,3 +43,22 @@ class OsModel(metaclass=OsModelBase):
     """
     Nesting fields will be supported with dot notation
     """
+
+    def save(self):
+        pass
+
+    @classmethod
+    def render_mappings(cls):
+        """
+        This will be used to render the mappings for the index
+        """
+        pass
+
+    @classmethod
+    def create_index_mapping(cls):
+        """
+        Eventually it would be nice to handle this the same way
+        django handles migrations. But will use this in the meantime
+        as POC
+        """
+        client = OpenSearch(settings.OPENSEARCH_HOSTS)

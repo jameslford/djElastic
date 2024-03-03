@@ -45,8 +45,7 @@ class OsQuerySet:
         return OsQuerySet(self.model, search=self.search)
 
     def to_dict(self):
-        queries = self.search.to_dict()
-        return
+        return self.search.to_dict()
 
     def range(self, field, gte=None, lte=None, gt=None, lt=None):
         """
@@ -86,7 +85,7 @@ class OsQuerySet:
     def exclude(self, *args, **kwargs):
         pass
 
-    def count(self):
+    def count(self) -> int:
         pass
 
     def aggregate(self, *args, **kwargs):
@@ -111,6 +110,9 @@ class OsQuerySet:
         """
 
     def get(self, document_id):
+        pass
+
+    def latest(self, field: str):
         pass
 
     def all(self):
