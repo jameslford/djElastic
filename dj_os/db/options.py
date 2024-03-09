@@ -1,4 +1,4 @@
-class IndexMetaOptions:
+class Options:
 
     def __init__(self, meta: dict) -> None:
         self.managed = True
@@ -6,3 +6,4 @@ class IndexMetaOptions:
         self.shards = 1
         self.replicas = 0
         self.index_pattern = None
+        self.abstract = False
