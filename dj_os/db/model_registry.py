@@ -5,7 +5,10 @@ class ModelRegistry:
 
     def register(self, model):
         self.models[model.__name__] = model
-        if not model._meta.abstract:
+        # import pdb
+
+        # pdb.set_trace()
+        if not model._meta or not model._meta.abstract:
             self.concrete_models[model.__name__] = model
 
     @property
